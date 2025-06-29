@@ -1,38 +1,75 @@
-.App {
+/* ===============================
+   ESTILOS GLOBALES PARA LA APP
+   =============================== */
+
+/* Fuente moderna y color de fondo suave */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+  background-color: #f8f9fa;
+  color: #222;
+}
+
+/* Títulos principales */
+h2 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
   text-align: center;
+  margin-bottom: 20px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* Subtítulos o etiquetas de campos */
+label {
+  display: block;
+  margin-top: 8px;
+  margin-bottom: 4px;
+  font-weight: 500;
+  color: #444;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+/* Campos de entrada (text, date, time, etc.) */
+input, select {
+  width: 100%;
+  padding: 8px;
+  font-size: 14px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+/* Botones generales */
+button {
+  background-color: #007bff;
   color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+  margin-top: 10px;
 }
 
-.App-link {
-  color: #61dafb;
+button:hover {
+  background-color: #0056b3;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* Separadores de sección (como en confirmación) */
+hr {
+  margin-top: 30px;
+  margin-bottom: 20px;
+  border: none;
+  border-top: 1px solid #ccc;
+}
+
+.contenedor-formulario {
+  max-width: 375px;
+  margin: 30px auto; /* antes 40px */
+  padding: 15px 25px; /* antes 20px 25px */
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }

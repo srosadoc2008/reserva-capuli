@@ -1,0 +1,71 @@
+.lista-reservas {
+  text-align: center;
+}
+
+.filtros {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin: 20px 0;
+}
+
+input[type="text"], select {
+  padding: 8px;
+  font-size: 14px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+th, td {
+  border: 1px solid #ccc;
+  padding: 8px;
+}
+
+.cancelar-btn {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.cancelar-btn:hover {
+  background-color: #c82333;
+}
+
+.exportar-btn {
+  background-color: #17a2b8;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.exportar-btn:hover {
+  background-color: #138496;
+}
+
+/* Ajuste específico para las columnas de la tabla */
+table th:nth-child(3),  /* Fecha */
+table td:nth-child(3) {
+  min-width: 110px;
+}
+
+table th:nth-child(7),  /* Código */
+table td:nth-child(7) {
+  min-width: 130px;
+}
+
+/* Contenedor con scroll horizontal si es necesario */
+.tabla-scroll {
+  overflow-x: auto;
+  max-width: 100%;
+  -webkit-overflow-scrolling: touch;
+}

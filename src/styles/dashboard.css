@@ -1,0 +1,46 @@
+
+.total {
+  background-color: #007bff;
+}
+
+.confirmadas {
+  background-color: #28a745;
+}
+
+.canceladas {
+  background-color: #dc3545;
+}
+
+.dashboard {
+  text-align: center;
+  padding: 30px;
+}
+
+.tarjetas {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.tarjeta {
+  padding: 20px 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  min-width: 150px;
+  color: white;
+  font-weight: 600;
+}
+
+.tarjeta.total {
+  background-color: #6c757d;
+}
+
+.tarjeta.confirmadas {
+  background-color: #28a745;
+}
+
+.tarjeta.canceladas {
+  background-color: #dc3545;
+}

@@ -1,0 +1,49 @@
+.panel-admin {
+  width: 90%;
+  max-width: 800px;
+  margin: 30px auto;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  padding: 20px;
+  background-color: #fafafa;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.botones-panel button {
+  margin: 0 5px;
+  padding: 10px 15px;
+  font-size: 15px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.botones-panel button:hover {
+  background-color: #0056b3;
+}
+
+.panel-contenido {
+  margin-top: 30px;
+}
+
+.cerrar-sesion-btn {
+  margin-left: 10px;
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.cerrar-sesion-btn:hover {
+  background-color: #5a6268;
+}
+
