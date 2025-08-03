@@ -1,25 +1,43 @@
+// src/components/ConfirmacionReserva.jsx
 import React from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import '../styles/confirmacionReserva.css';
 
-// Componente que muestra el resumen de una reserva confirmada
-function ConfirmacionReserva({ reserva, onNuevaReserva }) {
+const ConfirmacionReserva = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const reserva = location.state;
+
+  if (!reserva) {
+    return (
+      <div className="confirmacion-contenedor">
+        <h2>Error</h2>
+        <p>No se encontraron datos de reserva.</p>
+        <button className="boton-nueva-reserva" onClick={() => navigate('/')}>
+          Volver a inicio
+        </button>
+      </div>
+    );
+  }
+
   return (
-    <div className="contenedor-formulario confirmacion">
+    <div className="confirmacion-contenedor">
       <h2>¡Reserva Confirmada!</h2>
+      <p>Tu mesa ha sido reservada exitosamente.</p>
 
-      {/* Mostramos todos los datos importantes de la reserva */}
-      <p><strong>👤 Nombre:</strong> {reserva.nombre}</p>
-      <p><strong>📞 Teléfono:</strong> {reserva.telefono}</p>
-      <p><strong>📅 Fecha:</strong> {reserva.fecha}</p>
-      <p><strong>⏰ Hora:</strong> {reserva.hora}</p>
-      <p><strong>👥 Personas:</strong> {reserva.personas}</p>
-      <p><strong>🍽️ Mesa:</strong> {reserva.mesa}</p>
-      <p><strong>🔐 Código de Confirmación:</strong> {reserva.codigo}</p>
+      <div className="detalle-reserva">
+        <p><strong>👤 Nombre:</strong> {reserva.nombre}</p>
+        <p><strong>📞 Teléfono:</strong> {reserva.telefono}</p>
+        <p><strong>📅 Fecha:</strong> {reserva.fecha}</p>
+        <p><strong>⏰ Hora:</strong> {reserva.hora}</p>
+        <p><strong>🍽️ Mesa:</strong> {reserva.mesa}</p>
+        <p><strong>🔐 Código de Confirmación:</strong> {reserva.codigo}</p>
+      </div>
 
-      {/* Botón para permitir al cliente hacer otra reserva */}
-      <button onClick={onNuevaReserva}>Hacer otra reserva</button>
+      <button className="boton-nueva-reserva" onClick={() => navigate('/')}>
+        Hacer otra reserva
+      </button>
 
-      {/* Información del restaurante al pie del resumen */}
       <div className="info-restaurante">
         <hr />
         <p><strong>Restaurante Capulí</strong></p>
@@ -28,6 +46,6 @@ function ConfirmacionReserva({ reserva, onNuevaReserva }) {
       </div>
     </div>
   );
-}
+};
 
 export default ConfirmacionReserva;

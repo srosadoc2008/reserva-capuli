@@ -1,71 +1,117 @@
+/* src/styles/listaReservas.css */
+
 .lista-reservas {
+  padding: 30px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #fafafa;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.lista-reservas h2 {
   text-align: center;
+  margin-bottom: 20px;
 }
 
 .filtros {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   gap: 15px;
-  margin: 20px 0;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
 }
 
-input[type="text"], select {
-  padding: 8px;
+.filtros input[type="text"],
+.filtros input[type="date"],
+.filtros select {
+  padding: 8px 10px;
   font-size: 14px;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-}
-
-th, td {
   border: 1px solid #ccc;
-  padding: 8px;
-}
-
-.cancelar-btn {
-  background-color: #dc3545;
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.cancelar-btn:hover {
-  background-color: #c82333;
+  border-radius: 6px;
+  min-width: 160px;
 }
 
 .exportar-btn {
-  background-color: #17a2b8;
+  background-color: #198754;
   color: white;
   border: none;
   padding: 8px 14px;
-  border-radius: 5px;
+  border-radius: 6px;
   font-size: 14px;
   cursor: pointer;
+  margin-top: 10px;
 }
 
 .exportar-btn:hover {
-  background-color: #138496;
+  background-color: #157347;
 }
 
-/* Ajuste específico para las columnas de la tabla */
-table th:nth-child(3),  /* Fecha */
-table td:nth-child(3) {
-  min-width: 110px;
-}
-
-table th:nth-child(7),  /* Código */
-table td:nth-child(7) {
-  min-width: 130px;
-}
-
-/* Contenedor con scroll horizontal si es necesario */
 .tabla-scroll {
   overflow-x: auto;
   max-width: 100%;
-  -webkit-overflow-scrolling: touch;
+  border-radius: 10px;
 }
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+table thead {
+  background-color: #e9ecef;
+}
+
+table th,
+table td {
+  padding: 12px 10px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.estado {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 500;
+  display: inline-block;
+}
+
+.estado.confirmada {
+  background-color: #d1e7dd;
+  color: #0f5132;
+}
+
+.estado.pendiente {
+  background-color: #fff3cd;
+  color: #664d03;
+}
+
+.estado.cancelada {
+  background-color: #f8d7da;
+  color: #842029;
+}
+
+.acciones {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.icono-editar,
+.icono-eliminar {
+  cursor: pointer;
+  font-size: 16px;
+  color: #495057;
+  transition: color 0.2s ease;
+}
+
+.icono-editar:hover {
+  color: #0d6efd;
+}
+
+.icono-eliminar:hover {
+  color: #dc3545;
+}
+

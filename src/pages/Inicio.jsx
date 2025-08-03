@@ -10,7 +10,7 @@ function Inicio() {
       <div className="contenedor-inicio">
         <h2>Bienvenido al</h2>
         <h2>Restaurante Capulí</h2>
-        <p>Seleccione una opción para continuar:</p>
+        <p>Seleccione una opción para continuar_:</p>
 
         <div className="botones-inicio">
           <button onClick={() => navegar('/cliente')}>Reserva de Cliente</button>

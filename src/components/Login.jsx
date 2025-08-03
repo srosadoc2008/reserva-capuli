@@ -1,51 +1,62 @@
 import React, { useState } from 'react';
 import '../styles/login.css';
+import { FaUser, FaLock } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
-// Componente que gestiona el ingreso del administrador
-function Login({ onLoginExitoso }) {
-  // Estados locales para el usuario, contraseña y posibles errores
+const Login = () => {
   const [usuario, setUsuario] = useState('');
-  const [contrasena, setContrasena] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
-  // Función que se ejecuta al enviar el formulario
-  const manejarEnvio = (e) => {
-    e.preventDefault(); // Prevenimos recarga de la página
+  const handleLogin = async (e) => {
+    e.preventDefault();
 
-    // Validamos credenciales simples
-    if (usuario === 'admin' && contrasena === '1234') {
-      onLoginExitoso(); // Permitimos acceso al panel
-    } else {
-      setError('Credenciales incorrectas');
+    try {
+      const response = await fetch(`http://localhost:3001/usuarios?usuario=${usuario}&password=${password}`);
+      const data = await response.json();
+
+      if (data.length > 0) {
+        localStorage.setItem('adminLoggedIn', 'true');
+        navigate('/panel-admin');
+      } else {
+        setError('Usuario o contraseña incorrectos');
+      }
+    } catch (error) {
+      setError('Error al conectar con el servidor');
+      console.error('Error en login:', error);
     }
   };
 
   return (
-    <form className="formulario-login" onSubmit={manejarEnvio}>
-      <h2>Ingreso del Administrador</h2>
-
-      <label>Usuario:</label>
-      <input
-        type="text"
-        value={usuario}
-        onChange={(e) => setUsuario(e.target.value)}
-        required
-      />
-
-      <label>Contraseña:</label>
-      <input
-        type="password"
-        value={contrasena}
-        onChange={(e) => setContrasena(e.target.value)}
-        required
-      />
-
-      <button type="submit">Ingresar</button>
-
-      {/* Mensaje de error si las credenciales son incorrectas */}
-      {error && <p style={{ color: 'red', marginTop: '10px' }}>{error}</p>}
-    </form>
+    <div className="login-container">
+      <h2>Acceso Administrador</h2>
+      <form onSubmit={handleLogin} className="login-form">
+        <div className="input-group">
+          <FaUser className="icon" />
+          <input
+            type="text"
+            placeholder="Usuario"
+            value={usuario}
+            onChange={(e) => setUsuario(e.target.value)}
+            required
+          />
+        </div>
+        <div className="input-group">
+          <FaLock className="icon" />
+          <input
+            type="password"
+            placeholder="Contraseña"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </div>
+        {error && <p className="error">{error}</p>}
+        <button type="submit" className="btn-ingresar">Ingresar</button>
+      </form>
+    </div>
   );
-}
+};
 
 export default Login;

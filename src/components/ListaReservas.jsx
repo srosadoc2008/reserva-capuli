@@ -1,29 +1,63 @@
+// src/components/ListaReservas.jsx
+
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../styles/listaReservas.css';
 
-// Componente que muestra y gestiona la lista de reservas
 function ListaReservas() {
   const [reservas, setReservas] = useState([]);
   const [filtroEstado, setFiltroEstado] = useState('todas');
   const [busqueda, setBusqueda] = useState('');
   const [filtroFecha, setFiltroFecha] = useState('');
+  const [reservaSeleccionada, setReservaSeleccionada] = useState(null);
+  const navigate = useNavigate();
 
-  // Cargar las reservas desde el localStorage cuando se monta el componente
   useEffect(() => {
-    const datos = JSON.parse(localStorage.getItem('reservas')) || [];
-    setReservas(datos);
+    fetch('http://localhost:3001/reservas')
+      .then(res => res.json())
+      .then(data => setReservas(data))
+      .catch(error => console.error('Error al cargar reservas:', error));
   }, []);
 
-  // Función para cancelar una reserva (cambia su estado a "Cancelada")
-  const cancelarReserva = (id) => {
-    const actualizadas = reservas.map((r) =>
-      r.id === id ? { ...r, estado: 'Cancelada' } : r
-    );
-    setReservas(actualizadas);
-    localStorage.setItem('reservas', JSON.stringify(actualizadas));
+  const cancelarReserva = async (id) => {
+    try {
+      const reserva = reservas.find(r => r.id === id);
+      const actualizada = { ...reserva, estado: 'Cancelada' };
+
+      await fetch(`http://localhost:3001/reservas/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(actualizada)
+      });
+
+      setReservas(prev => prev.map(r => r.id === id ? actualizada : r));
+    } catch (error) {
+      console.error('Error al cancelar reserva:', error);
+    }
   };
 
-  // Filtrar las reservas según nombre, estado y fecha
+  const confirmarReserva = async (id) => {
+    try {
+      const reserva = reservas.find(r => r.id === id);
+      const actualizada = { ...reserva, estado: 'Confirmada' };
+
+      await fetch(`http://localhost:3001/reservas/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(actualizada)
+      });
+
+      setReservas(prev => prev.map(r => r.id === id ? actualizada : r));
+      setReservaSeleccionada(null);
+    } catch (error) {
+      console.error('Error al confirmar reserva:', error);
+    }
+  };
+
   const reservasFiltradas = reservas.filter((reserva) => {
     const coincideBusqueda = reserva.nombre.toLowerCase().includes(busqueda.toLowerCase());
     const coincideEstado = filtroEstado === 'todas' || reserva.estado === filtroEstado;
@@ -31,7 +65,6 @@ function ListaReservas() {
     return coincideBusqueda && coincideEstado && coincideFecha;
   });
 
-  // Exportar las reservas filtradas a un archivo CSV
   const exportarCSV = () => {
     const encabezado = ['Nombre', 'Teléfono', 'Fecha', 'Hora', 'Personas', 'Mesa', 'Código', 'Estado'];
     const filas = reservasFiltradas.map((r) => [
@@ -51,10 +84,9 @@ function ListaReservas() {
 
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
-
     const enlace = document.createElement('a');
-    enlace.setAttribute('href', url);
-    enlace.setAttribute('download', 'reservas.csv');
+    enlace.href = url;
+    enlace.download = 'reservas.csv';
     enlace.click();
   };
 
@@ -62,7 +94,6 @@ function ListaReservas() {
     <div className="lista-reservas">
       <h2>Gestión de Reservas</h2>
 
-      {/* Filtros: búsqueda por nombre, fecha y estado */}
       <div className="filtros">
         <input
           type="text"
@@ -78,20 +109,14 @@ function ListaReservas() {
         <select value={filtroEstado} onChange={(e) => setFiltroEstado(e.target.value)}>
           <option value="todas">Todas</option>
           <option value="Confirmada">Confirmadas</option>
+          <option value="Pendiente">Pendientes</option>
           <option value="Cancelada">Canceladas</option>
         </select>
+        <button className="exportar-btn" onClick={exportarCSV}>Exportar CSV</button>
       </div>
 
-      {/* Botón para exportar la tabla filtrada */}
-      <div style={{ textAlign: 'right', marginBottom: '10px' }}>
-        <button className="exportar-btn" onClick={exportarCSV}>
-          Exportar a CSV
-        </button>
-      </div>
-
-      {/* Tabla de reservas */}
       <div className="tabla-scroll">
-        <table>
+        <table className="table">
           <thead>
             <tr>
               <th>Nombre</th>
@@ -102,7 +127,7 @@ function ListaReservas() {
               <th>Mesa</th>
               <th>Código</th>
               <th>Estado</th>
-              <th>Acción</th>
+              <th>Acciones</th>
             </tr>
           </thead>
           <tbody>
@@ -115,14 +140,23 @@ function ListaReservas() {
                 <td>{reserva.personas}</td>
                 <td>{reserva.mesa}</td>
                 <td>{reserva.codigo || '-'}</td>
-                <td>{reserva.estado}</td>
                 <td>
-                  {reserva.estado === 'Confirmada' ? (
-                    <button className="cancelar-btn" onClick={() => cancelarReserva(reserva.id)}>
-                      Cancelar
-                    </button>
-                  ) : (
-                    '-' // Aquí podría ir "Reactivar" si se activa esa mejora
+                  <span className={`estado ${reserva.estado.toLowerCase()}`}>{reserva.estado}</span>
+                </td>
+                <td className="acciones">
+                  {reserva.estado === 'Pendiente' && (
+                    <span
+                      className="icono-editar"
+                      title="Confirmar"
+                      onClick={() => confirmarReserva(reserva.id)}
+                    >✅</span>
+                  )}
+                  {reserva.estado !== 'Cancelada' && (
+                    <span
+                      className="icono-eliminar"
+                      title="Cancelar"
+                      onClick={() => cancelarReserva(reserva.id)}
+                    >🗑️</span>
                   )}
                 </td>
               </tr>
@@ -131,6 +165,7 @@ function ListaReservas() {
         </table>
       </div>
 
+      <button className="volver-btn" onClick={() => navigate('/dashboard')}>Volver al Dashboard</button>
     </div>
   );
 }

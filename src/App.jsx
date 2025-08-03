@@ -1,67 +1,41 @@
-// Importamos las herramientas necesarias de React y React Router
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+// src/App.jsx
 
-// Importamos las vistas y componentes principales de la app
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import ClienteWrapper from './components/ClienteWrapper';
+import PanelAdmin from './components/PanelAdmin';
 import Inicio from './pages/Inicio';
 import Administrador from './pages/Administrador';
-import FormularioReserva from './components/FormularioReserva';
 import ConfirmacionReserva from './components/ConfirmacionReserva';
-import SplashScreen from './components/SplashScreen';
+import Dashboard from './components/Dashboard';
+import ListaReservas from './components/ListaReservas'; // Asegúrate de importar esto
 
-// Componente principal de la aplicación
 function App() {
-  // Estado para controlar si se debe mostrar la pantalla de presentación (splash)
-  const [mostrarSplash, setMostrarSplash] = useState(true);
-
-  // Cuando la app inicia, esperamos 3 segundos y ocultamos la pantalla de bienvenida
-  useEffect(() => {
-    const temporizador = setTimeout(() => {
-      setMostrarSplash(false);
-    }, 3000);
-
-    // Limpiamos el temporizador cuando el componente se desmonte (buena práctica)
-    return () => clearTimeout(temporizador);
-  }, []);
-
-  // Si el splash está activo, solo mostramos esa pantalla
-  if (mostrarSplash) {
-    return <SplashScreen />;
-  }
-
-  // Si ya pasaron los 3 segundos, cargamos las rutas normales de la aplicación
   return (
     <Router>
       <Routes>
-        {/* Página de inicio donde se elige entre Cliente o Administrador */}
+        {/* Página de inicio */}
         <Route path="/" element={<Inicio />} />
 
-        {/* Ruta para el formulario de reservas del cliente */}
+        {/* Formulario de cliente */}
         <Route path="/cliente" element={<ClienteWrapper />} />
 
-        {/* Ruta para el panel del administrador */}
+        {/* Login de administrador */}
         <Route path="/admin" element={<Administrador />} />
+
+        {/* Panel administrativo antiguo (ya no se usa si estás migrando a rutas separadas) */}
+        <Route path="/panel-admin" element={<PanelAdmin />} />
+
+        {/* Dashboard solo con KPIs */}
+        <Route path="/dashboard" element={<Dashboard />} />
+
+        {/* Lista completa de reservas */}
+        <Route path="/reservas" element={<ListaReservas />} />
+
+        {/* Confirmación de Reservas */}
+        <Route path="/confirmacion" element={<ConfirmacionReserva />} />
       </Routes>
     </Router>
   );
 }
 
-// Componente auxiliar para manejar el estado de una reserva confirmada
-function ClienteWrapper() {
-  const [reservaHecha, setReservaHecha] = useState(null);
-
-  return (
-    <div>
-      {/* Si hay una reserva hecha, mostramos la confirmación */}
-      {reservaHecha ? (
-        <ConfirmacionReserva reserva={reservaHecha} onNuevaReserva={() => setReservaHecha(null)} />
-      ) : (
-        // Si no hay reserva aún, mostramos el formulario
-        <FormularioReserva onReservaConfirmada={setReservaHecha} />
-      )}
-    </div>
-  );
-}
-
-// Exportamos el componente principal
 export default App;

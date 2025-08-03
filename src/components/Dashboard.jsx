@@ -1,39 +1,61 @@
+// src/components/Dashboard.jsx
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../styles/dashboard.css';
 
-// Componente que muestra un resumen general de las reservas
 function Dashboard() {
-  const [total, setTotal] = useState(0);
-  const [confirmadas, setConfirmadas] = useState(0);
-  const [canceladas, setCanceladas] = useState(0);
+  const [reservas, setReservas] = useState([]);
+  const navigate = useNavigate();
 
-  // Al cargar el componente, leemos las reservas del localStorage y calculamos los totales
   useEffect(() => {
-    const reservas = JSON.parse(localStorage.getItem('reservas')) || [];
+    const obtenerReservas = async () => {
+      try {
+        const response = await fetch('http://localhost:3001/reservas');
+        const data = await response.json();
+        setReservas(data);
+      } catch (error) {
+        console.error('Error al obtener reservas:', error);
+      }
+    };
 
-    setTotal(reservas.length);
-    setConfirmadas(reservas.filter(r => r.estado === 'Confirmada').length);
-    setCanceladas(reservas.filter(r => r.estado === 'Cancelada').length);
+    obtenerReservas();
   }, []);
+
+  const total = reservas.length;
+  const confirmadas = reservas.filter(r => r.estado === 'Confirmada').length;
+  const canceladas = reservas.filter(r => r.estado === 'Cancelada').length;
+  const pendientes = reservas.filter(r => r.estado === 'Pendiente').length;
 
   return (
     <div className="dashboard">
-      <h2>Resumen de Reservas</h2>
+      <h2>Resumen General de Reservas</h2>
 
-      {/* Tarjetas con los totales */}
       <div className="tarjetas">
         <div className="tarjeta total">
-          <h3>Total</h3>
-          <p>{total}</p>
+          <p className="titulo">Total de Reservas</p>
+          <p className="kpi">{total}</p>
         </div>
         <div className="tarjeta confirmadas">
-          <h3>Confirmadas</h3>
-          <p>{confirmadas}</p>
+          <p className="titulo">Reservas Confirmadas</p>
+          <p className="kpi">{confirmadas}</p>
+        </div>
+        <div className="tarjeta pendientes">
+          <p className="titulo">Reservas Pendientes</p>
+          <p className="kpi">{pendientes}</p>
         </div>
         <div className="tarjeta canceladas">
-          <h3>Canceladas</h3>
-          <p>{canceladas}</p>
+          <p className="titulo">Reservas Canceladas</p>
+          <p className="kpi">{canceladas}</p>
         </div>
+      </div>
+
+      <div className="botones-dashboard">
+        {reservas.length > 0 ? (
+          <button onClick={() => navigate('/reservas')}>Ver Lista de Reservas</button>
+        ) : (
+          <p className="aviso">No hay reservas para mostrar.</p>
+        )}
+        <button onClick={() => navigate('/')}>Volver al Inicio</button>
       </div>
     </div>
   );

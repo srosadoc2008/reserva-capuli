@@ -1,3 +1,5 @@
+/* src/styles/confirmacionReserva.css */
+
 .confirmacion-contenedor {
   width: 340px;
   margin: 40px auto;
@@ -50,4 +52,3 @@
   color: #555;
   border-top: 1px solid #ccc;
 }
-

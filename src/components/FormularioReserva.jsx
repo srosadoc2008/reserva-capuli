@@ -1,9 +1,10 @@
+// src/components/FormularioReserva.jsx
 import React, { useState } from 'react';
 import '../styles/formularioReserva.css';
+import { useNavigate } from 'react-router-dom';
+import CalendarioReservas from './CalendarioReservas';
 
-// Componente del formulario de reservas del cliente
-function FormularioReserva({ onReservaConfirmada }) {
-  // Estados para cada campo del formulario
+const FormularioReserva = () => {
   const [nombre, setNombre] = useState('');
   const [telefono, setTelefono] = useState('');
   const [fecha, setFecha] = useState('');
@@ -11,83 +12,74 @@ function FormularioReserva({ onReservaConfirmada }) {
   const [personas, setPersonas] = useState('');
   const [mesa, setMesa] = useState('');
   const [error, setError] = useState('');
+  const [detalleReservas, setDetalleReservas] = useState([]);
+  const navigate = useNavigate();
 
-  // Función para generar un código aleatorio tipo ABC-1234
   const generarCodigoConfirmacion = () => {
     const letras = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     const numeros = '0123456789';
     let codigo = '';
-
     for (let i = 0; i < 3; i++) {
       codigo += letras.charAt(Math.floor(Math.random() * letras.length));
     }
-
     codigo += '-';
-
     for (let i = 0; i < 4; i++) {
       codigo += numeros.charAt(Math.floor(Math.random() * numeros.length));
     }
-
     return codigo;
   };
 
-  // Función principal que se ejecuta al enviar el formulario
-  const manejarEnvio = (e) => {
-    e.preventDefault(); // Evita que la página se recargue
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-    // Verificamos si ya existe una reserva con la misma mesa, fecha y hora
-    const reservas = JSON.parse(localStorage.getItem('reservas')) || [];
-    const conflicto = reservas.find(
-      (r) => r.fecha === fecha && r.hora === hora && r.mesa === mesa
-    );
-
-    if (conflicto) {
-      setError('La mesa ya está reservada en ese horario.');
-      return;
-    }
-
-    // Creamos la nueva reserva con todos los datos ingresados
     const nuevaReserva = {
-      id: Date.now(),
       nombre,
       telefono,
       fecha,
       hora,
       personas,
       mesa,
-      estado: 'Confirmada', // por defecto, toda nueva reserva es confirmada
-      codigo: generarCodigoConfirmacion()
+      codigo: generarCodigoConfirmacion(),
+      estado: 'Pendiente'
     };
 
-    // Guardamos la reserva en el localStorage
-    const actualizadas = [...reservas, nuevaReserva];
-    localStorage.setItem('reservas', JSON.stringify(actualizadas));
+    try {
+      const response = await fetch('http://localhost:3001/reservas', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(nuevaReserva)
+      });
 
-    // Informamos al componente padre que la reserva fue realizada
-    onReservaConfirmada(nuevaReserva);
+      if (response.ok) {
+        const data = await response.json();
+        navigate('/confirmacion', { state: data });
+      } else {
+        alert('Error al registrar la reserva.');
+      }
+    } catch (error) {
+      console.error('Error en la solicitud:', error);
+      alert('No se pudo conectar con el servidor de reservas.');
+    }
+  };
 
-    // Limpiamos los campos del formulario
-    setNombre('');
-    setTelefono('');
-    setFecha('');
-    setHora('');
-    setPersonas('');
-    setMesa('');
-    setError('');
+  const handleFechaClick = async (fechaSeleccionada) => {
+    try {
+      const response = await fetch('http://localhost:3001/reservas');
+      const data = await response.json();
+      const reservasEnFecha = data.filter(reserva => reserva.fecha === fechaSeleccionada);
+      setDetalleReservas(reservasEnFecha);
+    } catch (error) {
+      console.error('Error al obtener reservas para la fecha seleccionada:', error);
+    }
   };
 
   return (
-    <div className="contenedor-formulario">
-
-      <form className="formulario-reserva" onSubmit={manejarEnvio}>
+    <div className="formulario">
+      <form onSubmit={handleSubmit}>
         <h2>Reservar Mesa</h2>
 
         <label>Nombre:</label>
-        <input
-          value={nombre}
-          onChange={(e) => setNombre(e.target.value)}
-          required
-        />
+        <input type="text" value={nombre} onChange={(e) => setNombre(e.target.value)} required />
 
         <label>Teléfono:</label>
         <input
@@ -100,20 +92,10 @@ function FormularioReserva({ onReservaConfirmada }) {
         />
 
         <label>Fecha:</label>
-        <input
-          type="date"
-          value={fecha}
-          onChange={(e) => setFecha(e.target.value)}
-          required
-        />
+        <input type="date" value={fecha} onChange={(e) => setFecha(e.target.value)} required />
 
         <label>Hora:</label>
-        <input
-          type="time"
-          value={hora}
-          onChange={(e) => setHora(e.target.value)}
-          required
-        />
+        <input type="time" value={hora} onChange={(e) => setHora(e.target.value)} required />
 
         <label>Número de personas:</label>
         <input
@@ -127,21 +109,35 @@ function FormularioReserva({ onReservaConfirmada }) {
         <label>Número de mesa:</label>
         <select value={mesa} onChange={(e) => setMesa(e.target.value)} required>
           <option value="">Seleccionar mesa</option>
-          <option value="1">Mesa 1</option>
-          <option value="2">Mesa 2</option>
-          <option value="3">Mesa 3</option>
-          <option value="4">Mesa 4</option>
-          <option value="5">Mesa 5</option>
-          <option value="6">Mesa 6</option>
+          <option value="Mesa 1">Mesa 1</option>
+          <option value="Mesa 2">Mesa 2</option>
+          <option value="Mesa 3">Mesa 3</option>
+          <option value="Mesa 4">Mesa 4</option>
+          <option value="Mesa 5">Mesa 5</option>
+          <option value="Mesa 6">Mesa 6</option>
         </select>
 
         <button type="submit">Confirmar Reserva</button>
 
-        {/* Mostrar mensaje de error si hay conflicto */}
         {error && <p style={{ color: 'red', marginTop: '10px' }}>{error}</p>}
       </form>
-  </div>
+
+      {/* Calendario visual después del formulario */}
+      <CalendarioReservas onFechaClick={handleFechaClick} />
+
+      {/* Lista de reservas al hacer clic en una fecha */}
+      {detalleReservas.length > 0 && (
+        <div className="detalle-reservas">
+          <h3>Reservas para la fecha seleccionada:</h3>
+          <ul>
+            {detalleReservas.map((res, index) => (
+              <li key={index}>Mesa: {res.mesa}, Hora: {res.hora}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
   );
-}
+};
 
 export default FormularioReserva;

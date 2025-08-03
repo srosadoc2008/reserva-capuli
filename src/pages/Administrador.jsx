@@ -1,20 +1,21 @@
-import React, { useState } from 'react';
+// src/pages/Administrador.jsx
+
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import Login from '../components/Login';
-import PanelAdmin from '../components/PanelAdmin';
 
 function Administrador() {
-  const [acceso, setAcceso] = useState(false);
+  const navigate = useNavigate();
+
+  const manejarLoginExitoso = () => {
+    navigate('/dashboard'); // Redirige al nuevo Dashboard
+  };
 
   return (
     <div>
-      {acceso ? (
-        <PanelAdmin onCerrarSesion={() => setAcceso(false)} />
-      ) : (
-        <Login onLoginExitoso={() => setAcceso(true)} />
-      )}
+      <Login onLoginExitoso={manejarLoginExitoso} />
     </div>
   );
 }
 
 export default Administrador;
-

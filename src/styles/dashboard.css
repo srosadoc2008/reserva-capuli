@@ -1,36 +1,49 @@
-
-.total {
-  background-color: #007bff;
-}
-
-.confirmadas {
-  background-color: #28a745;
-}
-
-.canceladas {
-  background-color: #dc3545;
-}
-
 .dashboard {
   text-align: center;
   padding: 30px;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f2f2f2;
+  min-height: 100vh;
+}
+
+.dashboard h2 {
+  color: #333;
+  margin-bottom: 30px;
 }
 
 .tarjetas {
   display: flex;
   justify-content: center;
-  gap: 30px;
-  margin-top: 20px;
+  gap: 25px;
   flex-wrap: wrap;
 }
 
 .tarjeta {
-  padding: 20px 30px;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  min-width: 150px;
+  flex: 1 1 200px;
+  min-width: 220px;
+  max-width: 250px;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
   color: white;
-  font-weight: 600;
+  transition: transform 0.3s ease;
+}
+
+.tarjeta:hover {
+  transform: translateY(-5px);
+}
+
+.tarjeta .titulo {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.tarjeta .kpi {
+  font-size: 36px;
+  font-weight: bold;
 }
 
 .tarjeta.total {
@@ -43,4 +56,37 @@
 
 .tarjeta.canceladas {
   background-color: #dc3545;
+}
+
+.tarjeta.pendientes {
+  background-color: #ffc107;
+  color: #333;
+}
+
+.botones-dashboard {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.botones-dashboard button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  background-color: #444;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.botones-dashboard button:hover {
+  background-color: #222;
+}
+
+.aviso {
+  margin-top: 20px;
+  color: #888;
 }
