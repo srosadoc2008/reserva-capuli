@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/dashboard.css';
+const API_URL = "/api/reservas";
 
 function Dashboard() {
   const [reservas, setReservas] = useState([]);
@@ -10,7 +11,7 @@ function Dashboard() {
   useEffect(() => {
     const obtenerReservas = async () => {
       try {
-        const response = await fetch('http://localhost:3001/reservas');
+        const response = await fetch(API_URL);
         const data = await response.json();
         setReservas(data);
       } catch (error) {
@@ -27,35 +28,60 @@ function Dashboard() {
   const pendientes = reservas.filter(r => r.estado === 'Pendiente').length;
 
   return (
-    <div className="dashboard">
-      <h2>Resumen General de Reservas</h2>
-
-      <div className="tarjetas">
-        <div className="tarjeta total">
-          <p className="titulo">Total de Reservas</p>
-          <p className="kpi">{total}</p>
+    <div className="contenedor">
+      <div className='dashboard'>
+        <div className="dashboard-cabecera">
+          <div className='breadcrumb'>
+            <button onClick={() => navigate('/admin')} className="btn-circle">
+              <i className="ti ti-chevron-left"></i>
+            </button>
+            <h2>Resumen de reservas</h2>
+          </div>
+          <button onClick={() => navigate('/dashboard')}>Dashboard</button>
+          {reservas.length > 0 ? (
+            <button onClick={() => navigate('/reservas')}>Reservas</button>
+          ) : (
+            <p className="aviso">No hay reservas para mostrar.</p>
+          )}
         </div>
-        <div className="tarjeta confirmadas">
-          <p className="titulo">Reservas Confirmadas</p>
-          <p className="kpi">{confirmadas}</p>
+        <div className="stats-grid">
+          <div className="stat-card">
+            <div className="stat-icon bg-muted">
+              <i className="ti ti-ticket"></i>
+            </div>
+            <div className="stat-info">
+              <p>Reservas totales</p>
+              <h2>{total}</h2>
+            </div>
+          </div>
+          <div className="stat-card">
+            <div className="stat-icon bg-success">
+              <i className="ti ti-circle-check"></i>
+            </div>
+            <div className="stat-info">
+              <p>Reservas confirmadas</p>
+              <h2>{confirmadas}</h2>
+            </div>
+          </div>
+          <div className="stat-card">
+            <div className="stat-icon bg-warning">
+              <i className="ti ti-alert-triangle"></i>
+            </div>
+            <div className="stat-info">
+              <p>Reservas pendientes</p>
+              <h2>{pendientes}</h2>
+            </div>
+          </div>
+          <div className="stat-card">
+            <div className="stat-icon bg-danger">
+              <i className="ti ti-x"></i>
+            </div>
+            <div className="stat-info">
+              <p>Reservas canceladas</p>
+              <h2>{canceladas}</h2>
+            </div>
+          </div>
         </div>
-        <div className="tarjeta pendientes">
-          <p className="titulo">Reservas Pendientes</p>
-          <p className="kpi">{pendientes}</p>
-        </div>
-        <div className="tarjeta canceladas">
-          <p className="titulo">Reservas Canceladas</p>
-          <p className="kpi">{canceladas}</p>
-        </div>
-      </div>
-
-      <div className="botones-dashboard">
-        {reservas.length > 0 ? (
-          <button onClick={() => navigate('/reservas')}>Ver Lista de Reservas</button>
-        ) : (
-          <p className="aviso">No hay reservas para mostrar.</p>
-        )}
-        <button onClick={() => navigate('/')}>Volver al Inicio</button>
       </div>
     </div>
   );

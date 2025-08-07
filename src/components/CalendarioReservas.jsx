@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import '../styles/calendarioReservas.css';
+const API_URL = "/api/reservas";
 
 const CalendarioReservas = () => {
   const [fechasReservadas, setFechasReservadas] = useState([]);
@@ -10,7 +11,7 @@ const CalendarioReservas = () => {
   useEffect(() => {
     const cargarFechas = async () => {
       try {
-        const response = await fetch('http://localhost:3001/reservas');
+        const response = await fetch(API_URL);
         const data = await response.json();
         const fechas = data.map(reserva => reserva.fecha);
         setFechasReservadas(fechas);
@@ -34,7 +35,7 @@ const CalendarioReservas = () => {
 
   return (
     <div className="calendario-contenedor">
-      <h3>Días con Reservas</h3>
+      <h3>Días con reservas</h3>
       <Calendar tileClassName={marcarFechas} />
     </div>
   );

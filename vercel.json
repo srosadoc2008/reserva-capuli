@@ -1,0 +1,35 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/reservas.func.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "api/usuarios.func.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "build/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/reservas/(.*)",
+      "dest": "/api/reservas.func.js"
+    },
+    {
+      "src": "/api/reservas",
+      "dest": "/api/reservas.func.js"
+    },
+    {
+      "src": "/api/usuarios",
+      "dest": "/api/usuarios.func.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/build/$1"
+    }
+  ]
+}

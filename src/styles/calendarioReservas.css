@@ -1,25 +1,23 @@
-/* src/styles/calendarioReservas.css */
-.calendario-contenedor {
-  margin: 30px auto;
-  max-width: 320px;
-  text-align: center;
-}
 
 .react-calendar {
   width: 100%;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: var(--color-gray-300);
+  border-radius: .5rem;
+  border: none;
 }
 
-.react-calendar__tile--now {
-  background: #f0f8ff;
-  border-radius: 8px;
+.react-calendar button {
+  color: var(--color-text-primary);
+  background-color: var(--color-gray-300);
+  aspect-ratio: 1;
 }
 
-.marcado {
-  background: #ffd700 !important;
-  border-radius: 8px;
-  color: #000 !important;
+.react-calendar button:hover {
+  background-color: var(--color-gray-400) !important;
+}
+
+.react-calendar button.marcado {
+  background: var(--color-button-primary) !important;
+  color: white !important;
   font-weight: bold;
 }

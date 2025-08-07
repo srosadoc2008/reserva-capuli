@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import Dashboard from './Dashboard';
 import '../styles/panelAdmin.css';
+const API_URL = "/api/reservas";
 
 const PanelAdmin = () => {
   const [reservas, setReservas] = useState([]);
@@ -10,7 +11,7 @@ const PanelAdmin = () => {
   useEffect(() => {
     const obtenerReservas = async () => {
       try {
-        const respuesta = await fetch('http://localhost:3001/reservas');
+        const respuesta = await fetch(API_URL);
         const datos = await respuesta.json();
         setReservas(datos);
       } catch (error) {

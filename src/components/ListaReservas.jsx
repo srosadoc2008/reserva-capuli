@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/listaReservas.css';
+const API_URL = "/api/reservas";
 
 function ListaReservas() {
   const [reservas, setReservas] = useState([]);
@@ -13,7 +14,7 @@ function ListaReservas() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('http://localhost:3001/reservas')
+    fetch(API_URL)
       .then(res => res.json())
       .then(data => setReservas(data))
       .catch(error => console.error('Error al cargar reservas:', error));
@@ -24,7 +25,7 @@ function ListaReservas() {
       const reserva = reservas.find(r => r.id === id);
       const actualizada = { ...reserva, estado: 'Cancelada' };
 
-      await fetch(`http://localhost:3001/reservas/${id}`, {
+      await fetch(`${API_URL}/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -43,7 +44,7 @@ function ListaReservas() {
       const reserva = reservas.find(r => r.id === id);
       const actualizada = { ...reserva, estado: 'Confirmada' };
 
-      await fetch(`http://localhost:3001/reservas/${id}`, {
+      await fetch(`${API_URL}/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -91,10 +92,21 @@ function ListaReservas() {
   };
 
   return (
-    <div className="lista-reservas">
-      <h2>Gestión de Reservas</h2>
 
-      <div className="filtros">
+
+    <div className="contenedor">
+      <div className='reserva'>
+      <div className="reserva-cabecera">
+        <div className='breadcrumb'>
+          <button onClick={() => navigate('/admin')} className="btn-circle">
+            <i className="ti ti-chevron-left"></i>
+          </button>
+          <h2>Gestión de reservas</h2>
+        </div>
+        <button onClick={() => navigate('/dashboard')}>Dashboard</button>
+        <button onClick={() => navigate('/reservas')}>Reservas</button>
+      </div>
+      <form className="form-filtros">
         <input
           type="text"
           placeholder="Buscar por nombre..."
@@ -107,15 +119,16 @@ function ListaReservas() {
           onChange={(e) => setFiltroFecha(e.target.value)}
         />
         <select value={filtroEstado} onChange={(e) => setFiltroEstado(e.target.value)}>
-          <option value="todas">Todas</option>
-          <option value="Confirmada">Confirmadas</option>
-          <option value="Pendiente">Pendientes</option>
-          <option value="Cancelada">Canceladas</option>
-        </select>
-        <button className="exportar-btn" onClick={exportarCSV}>Exportar CSV</button>
-      </div>
+            <option value="todas">Todas</option>
+            <option value="Confirmada">Confirmadas</option>
+            <option value="Pendiente">Pendientes</option>
+            <option value="Cancelada">Canceladas</option>
+          </select>
+      </form>
 
-      <div className="tabla-scroll">
+      <button className="exportar-btn" onClick={exportarCSV}>Exportar CSV</button>
+
+      <div className="table-scroll">
         <table className="table">
           <thead>
             <tr>
@@ -143,21 +156,19 @@ function ListaReservas() {
                 <td>
                   <span className={`estado ${reserva.estado.toLowerCase()}`}>{reserva.estado}</span>
                 </td>
-                <td className="acciones">
-                  {reserva.estado === 'Pendiente' && (
-                    <span
-                      className="icono-editar"
-                      title="Confirmar"
-                      onClick={() => confirmarReserva(reserva.id)}
-                    >✅</span>
-                  )}
-                  {reserva.estado !== 'Cancelada' && (
-                    <span
-                      className="icono-eliminar"
-                      title="Cancelar"
-                      onClick={() => cancelarReserva(reserva.id)}
-                    >🗑️</span>
-                  )}
+                <td>
+                  <div className='acciones'>
+                    {reserva.estado !== 'Cancelada' && (
+                      <button onClick={() => cancelarReserva(reserva.id)} className="btn-circle btn-circle--sm">
+                        <i className="ti ti-trash"></i>
+                      </button>
+                    )}
+                    {reserva.estado === 'Pendiente' && (
+                      <button onClick={() => confirmarReserva(reserva.id)} className="btn-circle btn-circle--sm">
+                        <i className="ti ti-check"></i>
+                      </button>
+                    )}
+                  </div>
                 </td>
               </tr>
             ))}
@@ -165,8 +176,10 @@ function ListaReservas() {
         </table>
       </div>
 
-      <button className="volver-btn" onClick={() => navigate('/dashboard')}>Volver al Dashboard</button>
+      </div>
     </div>
+
+
   );
 }
 

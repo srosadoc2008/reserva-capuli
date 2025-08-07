@@ -15,7 +15,7 @@
       "hora": "07:48",
       "mesa": "Mesa 2",
       "codigo": "2Q8PZ4Q2",
-      "estado": "Confirmada"
+      "estado": "Cancelada"
     },
     {
       "id": "f2e6",
@@ -25,7 +25,7 @@
       "hora": "08:10",
       "mesa": "Mesa 4",
       "codigo": "3W9OO67Y",
-      "estado": "Confirmada"
+      "estado": "Cancelada"
     },
     {
       "id": "83ae",
@@ -55,7 +55,7 @@
       "hora": "10:34",
       "mesa": "Mesa 3",
       "codigo": "30RM3RFA",
-      "estado": "Confirmada"
+      "estado": "Cancelada"
     },
     {
       "id": "a525",
@@ -121,6 +121,105 @@
       "personas": "4",
       "mesa": "Mesa 4",
       "codigo": "BFZ-0210",
+      "estado": "Pendiente"
+    },
+    {
+      "id": "8876",
+      "nombre": "hola",
+      "telefono": "980809789",
+      "fecha": "2025-08-05",
+      "hora": "05:16",
+      "personas": "2",
+      "mesa": "Mesa 3",
+      "codigo": "FBZ-2292",
+      "estado": "Pendiente"
+    },
+    {
+      "id": "dea5",
+      "nombre": "hfghgfh",
+      "telefono": "980809345",
+      "fecha": "2025-08-05",
+      "hora": "02:22",
+      "personas": "2",
+      "mesa": "Mesa 2",
+      "codigo": "CIA-8898",
+      "estado": "Pendiente"
+    },
+    {
+      "id": "113e",
+      "nombre": "fgdgdfg",
+      "telefono": "980809567",
+      "fecha": "2025-08-07",
+      "hora": "02:37",
+      "personas": "3",
+      "mesa": "Mesa 3",
+      "codigo": "IJC-2385",
+      "estado": "Pendiente"
+    },
+    {
+      "id": "e56a",
+      "nombre": "asddfss",
+      "telefono": "980809345",
+      "fecha": "2025-08-05",
+      "hora": "02:38",
+      "personas": "2",
+      "mesa": "Mesa 3",
+      "codigo": "BAB-2759",
+      "estado": "Pendiente"
+    },
+    {
+      "id": "88ce",
+      "nombre": "435435",
+      "telefono": "980809456",
+      "fecha": "2025-08-05",
+      "hora": "02:42",
+      "personas": "2",
+      "mesa": "Mesa 2",
+      "codigo": "HGB-3008",
+      "estado": "Pendiente"
+    },
+    {
+      "id": "dd91",
+      "nombre": "rgegerg",
+      "telefono": "980809567",
+      "fecha": "2025-08-05",
+      "hora": "02:01",
+      "personas": "3",
+      "mesa": "Mesa 3",
+      "codigo": "HXF-3312",
+      "estado": "Pendiente"
+    },
+    {
+      "id": "75dd",
+      "nombre": "sfdsfds",
+      "telefono": "980809789",
+      "fecha": "2025-08-07",
+      "hora": "02:06",
+      "personas": "2",
+      "mesa": "Mesa 1",
+      "codigo": "MBL-5714",
+      "estado": "Pendiente"
+    },
+    {
+      "id": "4720",
+      "nombre": "trtret",
+      "telefono": "980809890",
+      "fecha": "2025-08-05",
+      "hora": "03:09",
+      "personas": "2",
+      "mesa": "Mesa 2",
+      "codigo": "JFV-7691",
+      "estado": "Pendiente"
+    },
+    {
+      "id": "04fb",
+      "nombre": "DANIEL RODRIGUEZ",
+      "telefono": "966666657",
+      "fecha": "2025-08-07",
+      "hora": "05:52",
+      "personas": "6",
+      "mesa": "Mesa 3",
+      "codigo": "RDM-5024",
       "estado": "Pendiente"
     }
   ]
