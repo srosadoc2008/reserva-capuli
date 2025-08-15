@@ -1,5 +1,5 @@
 // src/components/Dashboard.jsx
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/dashboard.css';
 const API_URL = "/api/reservas";
@@ -22,10 +22,34 @@ function Dashboard() {
     obtenerReservas();
   }, []);
 
-  const total = reservas.length;
-  const confirmadas = reservas.filter(r => r.estado === 'Confirmada').length;
-  const canceladas = reservas.filter(r => r.estado === 'Cancelada').length;
-  const pendientes = reservas.filter(r => r.estado === 'Pendiente').length;
+  // =======================
+  // MEMOIZACIÓN DE KPIs
+  // =======================
+  const dataReservas = useMemo(
+    () => (Array.isArray(reservas) ? reservas : []),
+    [reservas]
+  );
+
+  const total = useMemo(
+    () => dataReservas.length,
+    [dataReservas]
+  );
+
+  const confirmadas = useMemo(
+    () => dataReservas.filter(r => r.estado === 'Confirmada').length,
+    [dataReservas]
+  );
+
+  const canceladas = useMemo(
+    () => dataReservas.filter(r => r.estado === 'Cancelada').length,
+    [dataReservas]
+  );
+
+  const pendientes = useMemo(
+    () => dataReservas.filter(r => r.estado === 'Pendiente').length,
+    [dataReservas]
+  );
+  // =======================
 
   return (
     <div className="contenedor">
@@ -88,4 +112,3 @@ function Dashboard() {
 }
 
 export default Dashboard;
-

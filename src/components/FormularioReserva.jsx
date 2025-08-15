@@ -5,6 +5,39 @@ import { useNavigate } from 'react-router-dom';
 import CalendarioReservas from './CalendarioReservas';
 const API_URL = "/api/reservas";
 
+// === Utilidades de validación (no cambian tu diseño) ===
+const todayISO = new Date().toISOString().slice(0, 10); // para min en <input type="date">
+
+function parseISODateOnly(value) {
+  const [y, m, d] = (value || '').split('-').map(Number);
+  if (!y || !m || !d) return null;
+  return new Date(y, m - 1, d, 0, 0, 0, 0);
+}
+
+function isFutureOrToday(dateStr) {
+  const d = parseISODateOnly(dateStr);
+  if (!d) return false;
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  return d.getTime() >= today.getTime();
+}
+
+function isValidTime24h(timeStr) {
+  const [hh, mm] = (timeStr || '').split(':').map(Number);
+  if (Number.isNaN(hh) || Number.isNaN(mm)) return false;
+  if (hh < 0 || hh > 23) return false;
+  if (mm < 0 || mm > 59) return false;
+  const minutes = hh * 60 + mm;
+  return minutes >= 13 * 60 && minutes <= 22 * 60; // 13:00 — 22:00
+}
+
+function isValidPartySize(n) {
+  const val = Number(n);
+  return Number.isInteger(val) && val >= 1 && val <= 10;
+}
+
+
+
 const FormularioReserva = () => {
   const [nombre, setNombre] = useState('');
   const [telefono, setTelefono] = useState('');
@@ -105,11 +138,24 @@ const FormularioReserva = () => {
           </div>
           <div>
             <label>Fecha:</label>
-            <input type="date" value={fecha} onChange={(e) => setFecha(e.target.value)} required />
+            <input
+              type="date"
+              value={fecha}
+              onChange={(e) => setFecha(e.target.value)}
+              min={todayISO}         // ✅ bloquea fechas pasadas en el selector
+              required
+            />
           </div>
           <div>
             <label>Hora:</label>
-            <input type="time" value={hora} onChange={(e) => setHora(e.target.value)} required />
+            <input
+              type="time"
+              value={hora}
+              onChange={(e) => setHora(e.target.value)}
+              min="13:00"            // ✅ 1 pm
+              max="22:00"            // ✅ 10 pm
+              required
+            />
           </div>
           <div className="row">
             <div>
@@ -117,6 +163,7 @@ const FormularioReserva = () => {
               <input
                 type="number"
                 min="1"
+                max="10"
                 value={personas}
                 onChange={(e) => setPersonas(e.target.value)}
                 required

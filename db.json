@@ -121,7 +121,7 @@
       "personas": "4",
       "mesa": "Mesa 4",
       "codigo": "BFZ-0210",
-      "estado": "Pendiente"
+      "estado": "Confirmada"
     },
     {
       "id": "8876",
@@ -132,7 +132,7 @@
       "personas": "2",
       "mesa": "Mesa 3",
       "codigo": "FBZ-2292",
-      "estado": "Pendiente"
+      "estado": "Confirmada"
     },
     {
       "id": "dea5",
@@ -154,7 +154,7 @@
       "personas": "3",
       "mesa": "Mesa 3",
       "codigo": "IJC-2385",
-      "estado": "Pendiente"
+      "estado": "Confirmada"
     },
     {
       "id": "e56a",
@@ -221,6 +221,61 @@
       "mesa": "Mesa 3",
       "codigo": "RDM-5024",
       "estado": "Pendiente"
+    },
+    {
+      "id": "79b5",
+      "nombre": "CARMEN",
+      "telefono": "965874585",
+      "fecha": "2025-08-08",
+      "hora": "16:05",
+      "personas": "5",
+      "mesa": "Mesa 3",
+      "codigo": "UAH-2865",
+      "estado": "Pendiente"
+    },
+    {
+      "id": "ff81",
+      "nombre": "Pedro Cabrera",
+      "telefono": "986342564",
+      "fecha": "2025-08-14",
+      "hora": "22:31",
+      "personas": "5",
+      "mesa": "Mesa 4",
+      "codigo": "TPD-7107",
+      "estado": "Pendiente"
+    },
+    {
+      "id": "093e",
+      "nombre": "Pablo Neruda",
+      "telefono": "987765478",
+      "fecha": "2025-08-16",
+      "hora": "15:42",
+      "personas": "10",
+      "mesa": "Mesa 4",
+      "codigo": "IWO-6492",
+      "estado": "Pendiente"
+    },
+    {
+      "id": "21fa",
+      "nombre": "Guillermo Castañeda",
+      "telefono": "987653429",
+      "fecha": "2025-08-23",
+      "hora": "14:15",
+      "personas": "5",
+      "mesa": "Mesa 2",
+      "codigo": "EML-8728",
+      "estado": "Pendiente"
+    },
+    {
+      "id": "58a9",
+      "nombre": "Paolo Guerrero",
+      "telefono": "987352412",
+      "fecha": "2025-08-23",
+      "hora": "21:42",
+      "personas": "4",
+      "mesa": "Mesa 3",
+      "codigo": "PRD-4005",
+      "estado": "Confirmada"
     }
   ]
 }

@@ -1,6 +1,6 @@
 // src/components/ListaReservas.jsx
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/listaReservas.css';
 const API_URL = "/api/reservas";
@@ -59,12 +59,28 @@ function ListaReservas() {
     }
   };
 
-  const reservasFiltradas = reservas.filter((reserva) => {
-    const coincideBusqueda = reserva.nombre.toLowerCase().includes(busqueda.toLowerCase());
-    const coincideEstado = filtroEstado === 'todas' || reserva.estado === filtroEstado;
-    const coincideFecha = !filtroFecha || reserva.fecha === filtroFecha;
-    return coincideBusqueda && coincideEstado && coincideFecha;
-  });
+  // ===========================
+  // MEMOIZACIÓN (Paso 2)
+  // ===========================
+  const reservasFiltradas = useMemo(() => {
+    const base = Array.isArray(reservas) ? reservas : [];
+    const busq = (busqueda || '').toLowerCase();
+
+    const filtradas = base.filter((reserva) => {
+      const coincideBusqueda = (reserva.nombre || '').toLowerCase().includes(busq);
+      const coincideEstado = filtroEstado === 'todas' || reserva.estado === filtroEstado;
+      const coincideFecha = !filtroFecha || reserva.fecha === filtroFecha;
+      return coincideBusqueda && coincideEstado && coincideFecha;
+    });
+
+    // Si más adelante quieres ordenar, puedes descomentar:
+    // return [...filtradas].sort((a, b) =>
+    //   ((a.fecha || '') + (a.hora || '')).localeCompare((b.fecha || '') + (b.hora || ''))
+    // );
+
+    return filtradas;
+  }, [reservas, busqueda, filtroEstado, filtroFecha]);
+  // ===========================
 
   const exportarCSV = () => {
     const encabezado = ['Nombre', 'Teléfono', 'Fecha', 'Hora', 'Personas', 'Mesa', 'Código', 'Estado'];
@@ -92,94 +108,91 @@ function ListaReservas() {
   };
 
   return (
-
-
     <div className="contenedor">
       <div className='reserva'>
-      <div className="reserva-cabecera">
-        <div className='breadcrumb'>
-          <button onClick={() => navigate('/admin')} className="btn-circle">
-            <i className="ti ti-chevron-left"></i>
-          </button>
-          <h2>Gestión de reservas</h2>
+        <div className="reserva-cabecera">
+          <div className='breadcrumb'>
+            <button onClick={() => navigate('/admin')} className="btn-circle">
+              <i className="ti ti-chevron-left"></i>
+            </button>
+            <h2>Gestión de reservas</h2>
+          </div>
+          <button onClick={() => navigate('/dashboard')}>Dashboard</button>
+          <button onClick={() => navigate('/reservas')}>Reservas</button>
         </div>
-        <button onClick={() => navigate('/dashboard')}>Dashboard</button>
-        <button onClick={() => navigate('/reservas')}>Reservas</button>
-      </div>
-      <form className="form-filtros">
-        <input
-          type="text"
-          placeholder="Buscar por nombre..."
-          value={busqueda}
-          onChange={(e) => setBusqueda(e.target.value)}
-        />
-        <input
-          type="date"
-          value={filtroFecha}
-          onChange={(e) => setFiltroFecha(e.target.value)}
-        />
-        <select value={filtroEstado} onChange={(e) => setFiltroEstado(e.target.value)}>
+
+        <form className="form-filtros">
+          <input
+            type="text"
+            placeholder="Buscar por nombre..."
+            value={busqueda}
+            onChange={(e) => setBusqueda(e.target.value)}
+          />
+          <input
+            type="date"
+            value={filtroFecha}
+            onChange={(e) => setFiltroFecha(e.target.value)}
+          />
+          <select value={filtroEstado} onChange={(e) => setFiltroEstado(e.target.value)}>
             <option value="todas">Todas</option>
             <option value="Confirmada">Confirmadas</option>
             <option value="Pendiente">Pendientes</option>
             <option value="Cancelada">Canceladas</option>
           </select>
-      </form>
+        </form>
 
-      <button className="exportar-btn" onClick={exportarCSV}>Exportar CSV</button>
+        <button className="exportar-btn" onClick={exportarCSV}>Exportar CSV</button>
 
-      <div className="table-scroll">
-        <table className="table">
-          <thead>
-            <tr>
-              <th>Nombre</th>
-              <th>Teléfono</th>
-              <th>Fecha</th>
-              <th>Hora</th>
-              <th>Personas</th>
-              <th>Mesa</th>
-              <th>Código</th>
-              <th>Estado</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {reservasFiltradas.map((reserva) => (
-              <tr key={reserva.id}>
-                <td>{reserva.nombre}</td>
-                <td>{reserva.telefono}</td>
-                <td>{reserva.fecha}</td>
-                <td>{reserva.hora}</td>
-                <td>{reserva.personas}</td>
-                <td>{reserva.mesa}</td>
-                <td>{reserva.codigo || '-'}</td>
-                <td>
-                  <span className={`estado ${reserva.estado.toLowerCase()}`}>{reserva.estado}</span>
-                </td>
-                <td>
-                  <div className='acciones'>
-                    {reserva.estado !== 'Cancelada' && (
-                      <button onClick={() => cancelarReserva(reserva.id)} className="btn-circle btn-circle--sm">
-                        <i className="ti ti-trash"></i>
-                      </button>
-                    )}
-                    {reserva.estado === 'Pendiente' && (
-                      <button onClick={() => confirmarReserva(reserva.id)} className="btn-circle btn-circle--sm">
-                        <i className="ti ti-check"></i>
-                      </button>
-                    )}
-                  </div>
-                </td>
+        <div className="table-scroll">
+          <table className="table">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Teléfono</th>
+                <th>Fecha</th>
+                <th>Hora</th>
+                <th>Personas</th>
+                <th>Mesa</th>
+                <th>Código</th>
+                <th>Estado</th>
+                <th>Acciones</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              {reservasFiltradas.map((reserva) => (
+                <tr key={reserva.id}>
+                  <td>{reserva.nombre}</td>
+                  <td>{reserva.telefono}</td>
+                  <td>{reserva.fecha}</td>
+                  <td>{reserva.hora}</td>
+                  <td>{reserva.personas}</td>
+                  <td>{reserva.mesa}</td>
+                  <td>{reserva.codigo || '-'}</td>
+                  <td>
+                    <span className={`estado ${reserva.estado.toLowerCase()}`}>{reserva.estado}</span>
+                  </td>
+                  <td>
+                    <div className='acciones'>
+                      {reserva.estado !== 'Cancelada' && (
+                        <button onClick={() => cancelarReserva(reserva.id)} className="btn-circle btn-circle--sm">
+                          <i className="ti ti-trash"></i>
+                        </button>
+                      )}
+                      {reserva.estado === 'Pendiente' && (
+                        <button onClick={() => confirmarReserva(reserva.id)} className="btn-circle btn-circle--sm">
+                          <i className="ti ti-check"></i>
+                        </button>
+                      )}
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
 
       </div>
     </div>
-
-
   );
 }
 
